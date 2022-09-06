@@ -1,0 +1,6 @@
+Authentication Laravel
+
+- Middleware
+- Truy xuất thông tin
+- Kiểm tra đăng nhập
+- Phân quyền

@@ -5,6 +5,10 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Doctors\Auth\LoginController as DoctorLoginController;
+use App\Http\Controllers\Doctors\DoctorController;
+use App\Http\Controllers\Doctors\Auth\ForgotPasswordController;
+use App\Http\Controllers\Doctors\Auth\ResetPasswordController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -42,4 +46,30 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 Route::prefix('admin')->middleware('auth')->group(function(){
     Route::get('/', [DashboardController::class, 'index']);
 });
+
+//Custom Authentication
+
+Route::prefix('doctors')->name('doctors.')->group(function(){
+
+    Route::get('/', [DoctorController::class, 'index'])->name('index')->middleware('auth:doctor');
+
+    Route::get('login', [DoctorLoginController::class, 'login'])->name('login')->middleware('guest:doctor');
+
+    Route::post('login', [DoctorLoginController::class, 'handleLogin']);
+
+    Route::post('logout', [DoctorLoginController::class, 'logout'])->name('logout')->middleware('auth:doctor');
+
+    Route::get('forgot-password', [ForgotPasswordController::class, 'showForm'])->name('forgot');
+
+    Route::post('forgot-password', [ForgotPasswordController::class, 'sendEmail']);
+
+    Route::get('reset-password', [ResetPasswordController::class, 'showForm'])->name('reset');
+});
+
+
+
+
+
+
+
 
